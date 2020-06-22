@@ -66,15 +66,13 @@ namespace Tw.Net.Models
         public int Media { get; set; }
 
         /// <summary>
-        /// 是否受保护（已弃用）
+        /// 是否受保护
         /// </summary>
-        [Obsolete("Deprecated now!", false)]
         public int Private { get; set; }
 
         /// <summary>
-        /// 是否认证过（已弃用）
+        /// 是否认证过
         /// </summary>
-        [Obsolete("Deprecated now!", false)]
         public int Verified { get; set; }
 
         /// <summary>

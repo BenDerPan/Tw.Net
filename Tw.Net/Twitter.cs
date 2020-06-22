@@ -11,12 +11,28 @@ namespace Tw.Net
 {
     public class Twitter
     {
+        private readonly List<RequestProxy> proxies = new List<RequestProxy>();
+        public List<RequestProxy> Proxies => proxies;
 
         public Twitter()
         {
             DebugSettings.IsDebug = true;
         }
 
+        RequestProxy GetRandomProxy()
+        {
+            if (proxies.Count < 1)
+            {
+                return null;
+            }
+            if (proxies.Count == 1)
+            {
+                return proxies[0];
+            }
+            Random random = new Random();
+            var index = random.Next(0, proxies.Count);
+            return proxies[index];
+        }
         public async Task InitAsync()
         {
             var isOnlineOk = await HtmlLoader.TryLoadAgentSource(true);
@@ -34,7 +50,7 @@ namespace Tw.Net
         public async Task<UserModel> GetUserProfileAsync(string username)
         {
 
-            var htmlDoc = await HtmlLoader.TryLoadAndParsePageAsync($"https://twitter.com/{username}");
+            var htmlDoc = await HtmlLoader.TryLoadAndParsePageAsync($"https://twitter.com/{username}", GetRandomProxy());
             if (htmlDoc != null)
             {
                 if (HtmlExtracter.TryParseUser(htmlDoc, out var user))

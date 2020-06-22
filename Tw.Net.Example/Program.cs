@@ -18,7 +18,7 @@ namespace Tw.Net.Example
             await tw.InitAsync();
 
             var testUsers = new List<string>(){
-                "realDonaldTrump","jack","taylorswift"
+                 "realDonaldTrump","BreitbartNews","taylorswift13"
             };
             foreach (var acc in testUsers)
             {
