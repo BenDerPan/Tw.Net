@@ -2,11 +2,27 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Copyright>MIT</Copyright>
+    <Description>Twitter crawler library.</Description>
+    <PackageProjectUrl>https://github.com/BenDerPan/Tw.Net</PackageProjectUrl>
+    <PackageIcon>logo.jpg</PackageIcon>
+    <RepositoryUrl>https://github.com/BenDerPan/Tw.Net</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
+    <PackageTags>Twitter Crawler DotNet</PackageTags>
+    <Authors>BenDerPan</Authors>
+    <Product>Tw.Net</Product>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.14.0" />
     <PackageReference Include="FakeAgent.Net" Version="1.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="logo.jpg">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
