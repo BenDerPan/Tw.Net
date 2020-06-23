@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Tw.Net.Core;
 
 namespace Tw.Net.Example
 {
@@ -22,10 +23,10 @@ namespace Tw.Net.Example
             };
             foreach (var acc in testUsers)
             {
-                Console.WriteLine($"===================={acc}=====================");
+                DebugSettings.LogInfo("Get User Profile", $"===================={acc}=====================");
                 var user = await tw.GetUserProfileAsync(acc);
 
-                Console.WriteLine(user);
+                DebugSettings.LogInfo("User Profile", $"{Environment.NewLine}{user}");
             }
 
 
