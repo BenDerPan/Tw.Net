@@ -9,12 +9,9 @@ namespace Tw.Net.Core
 {
     public class HtmlExtracter
     {
-        public static bool TryParseUser(IHtmlDocument doc, out UserModel user)
+        public static bool TryParseUser(IHtmlDocument doc, out TwitterUserModel user)
         {
-            user = new UserModel();
-            // var htmlSource = File.ReadAllText("https:twitter.comrealDonaldTrump.html");
-            // var parser = new HtmlParser();
-            // var doc = await parser.ParseDocumentAsync(htmlSource);
+            user = new TwitterUserModel();
             user.SpiderTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             try
@@ -31,7 +28,7 @@ namespace Tw.Net.Core
                     user.Private = userIDElem.GetAttribute("data-protected") == "true" ? 1 : 0;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -39,7 +36,7 @@ namespace Tw.Net.Core
             {
                 user.Verified = doc.QuerySelector("span.ProfileHeaderCard-badges").TextContent.Contains("Verified account") ? 1 : 0;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 user.Verified = 0;
             }
@@ -53,7 +50,7 @@ namespace Tw.Net.Core
                     user.Avatar = avatarElem.GetAttribute("src");
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 user.Avatar = string.Empty;
             }
@@ -61,7 +58,7 @@ namespace Tw.Net.Core
             {
                 user.Bio = doc.QuerySelector("p.ProfileHeaderCard-bio").TextContent.Replace("\n", " ");
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 user.Bio = string.Empty;
             }
@@ -69,7 +66,7 @@ namespace Tw.Net.Core
             {
                 user.Location = doc.QuerySelector("span.ProfileHeaderCard-locationText").TextContent.Replace("\n", " ").Trim();
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 user.Location = string.Empty;
             }
@@ -77,7 +74,7 @@ namespace Tw.Net.Core
             {
                 user.Url = doc.QuerySelector("span.ProfileHeaderCard-urlText a").GetAttribute("title");
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 user.Url = string.Empty;
             }
@@ -87,75 +84,75 @@ namespace Tw.Net.Core
                 user.JoinTime = joinDateTime[0];
                 user.JoinDate = joinDateTime[1];
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 user.JoinDate = string.Empty;
                 user.JoinTime = string.Empty;
             }
             try
             {
-                int.TryParse(doc.QuerySelector("li.ProfileNav-item.ProfileNav-item--tweets a span.ProfileNav-value").GetAttribute("data-count"), out var tweetsCount);
+                long.TryParse(doc.QuerySelector("li.ProfileNav-item.ProfileNav-item--tweets a span.ProfileNav-value").GetAttribute("data-count"), out var tweetsCount);
                 user.Tweets = tweetsCount;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 user.Tweets = 0;
             }
             try
             {
-                int.TryParse(doc.QuerySelector("li.ProfileNav-item.ProfileNav-item--following a span.ProfileNav-value").GetAttribute("data-count"), out var followingCount);
+                long.TryParse(doc.QuerySelector("li.ProfileNav-item.ProfileNav-item--following a span.ProfileNav-value").GetAttribute("data-count"), out var followingCount);
                 user.Following = followingCount;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 user.Following = 0;
             }
 
             try
             {
-                int.TryParse(doc.QuerySelector("li.ProfileNav-item.ProfileNav-item--followers a span.ProfileNav-value").GetAttribute("data-count"), out var followersCount);
+                long.TryParse(doc.QuerySelector("li.ProfileNav-item.ProfileNav-item--followers a span.ProfileNav-value").GetAttribute("data-count"), out var followersCount);
                 user.Followers = followersCount;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 user.Followers = 0;
             }
 
             try
             {
-                int.TryParse(doc.QuerySelector("li.ProfileNav-item.ProfileNav-item--favorites a span.ProfileNav-value").GetAttribute("data-count"), out var favoritesCount);
+                long.TryParse(doc.QuerySelector("li.ProfileNav-item.ProfileNav-item--favorites a span.ProfileNav-value").GetAttribute("data-count"), out var favoritesCount);
                 user.Likes = favoritesCount;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 user.Likes = 0;
             }
             try
             {
                 var mediaCountStr = doc.QuerySelector("a.PhotoRail-headingWithCount").TextContent.Trim().Split(new[] { ' ' })[0].Replace(",", "").ToLower().Trim();
-                int mediaCount = 0;
+                long mediaCount = 0;
                 if (mediaCountStr.EndsWith("k"))
                 {
                     float.TryParse(mediaCountStr.Replace("k", ""), out var count);
-                    mediaCount = (int)(count * 1000);
+                    mediaCount = (long)(count * 1000);
                 }
                 else if (mediaCountStr.EndsWith("m"))
                 {
                     float.TryParse(mediaCountStr.Replace("m", ""), out var count);
-                    mediaCount = (int)(count * 1000000);
+                    mediaCount = (long)(count * 1000000);
                 }
                 else if (mediaCountStr.EndsWith("b"))
                 {
                     float.TryParse(mediaCountStr.Replace("b", ""), out var count);
-                    mediaCount = (int)(count * 1000000000);
+                    mediaCount = (long)(count * 1000000000);
                 }
                 else
                 {
-                    int.TryParse(mediaCountStr, out mediaCount);
+                    long.TryParse(mediaCountStr, out mediaCount);
                 }
                 user.Media = mediaCount;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 user.Media = 0;
             }
@@ -163,7 +160,7 @@ namespace Tw.Net.Core
             {
                 user.BackgroundImage = doc.QuerySelector("div.ProfileCanopy-headerBg img").GetAttribute("src");
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 user.BackgroundImage = string.Empty;
             }
@@ -171,6 +168,137 @@ namespace Tw.Net.Core
             return true;
 
 
+        }
+
+        public static bool TryParseTweet(IHtmlDocument doc,out TwitterTweetPageModel pageModel)
+        {
+            pageModel = null;
+            pageModel = new TwitterTweetPageModel() {  HasNext = false };
+            try
+            {
+                var tweetDivs = doc.QuerySelectorAll("div.tweet");
+                for (int i = 0; i < tweetDivs.Length; i++)
+                {
+                    var tDiv = tweetDivs[i];
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+            return false;
         }
     }
 }

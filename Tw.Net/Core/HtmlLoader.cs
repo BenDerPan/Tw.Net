@@ -20,7 +20,7 @@ namespace Tw.Net.Core
             return isOk;
         }
 
-        public static async Task<IHtmlDocument> TryLoadAndParsePageAsync(string url, RequestProxy proxy = null, int timeoutMilliseconds = 15000)
+        public static async Task<string> TryLoadPageAsync(string url, RequestProxy proxy = null, int timeoutMilliseconds = 15000)
         {
             HttpClient httpClient;
             if (proxy != null)
@@ -65,6 +65,19 @@ namespace Tw.Net.Core
                 {
                     DebugSettings.SaveUrlPage(url, htmlSource);
                 }
+                return htmlSource;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public static async Task<IHtmlDocument> TryLoadAndParsePageAsync(string url, RequestProxy proxy = null, int timeoutMilliseconds = 15000)
+        {
+            var htmlSource = await TryLoadPageAsync(url, proxy, timeoutMilliseconds);
+            try
+            {
                 var parser = new HtmlParser();
                 var doc = await parser.ParseDocumentAsync(htmlSource);
                 return doc;

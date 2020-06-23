@@ -25,10 +25,22 @@ namespace Tw.Net.Example
             };
             foreach (var acc in testUsers)
             {
-                DebugSettings.LogInfo("Get User Profile", $"===================={acc}=====================");
-                var user = await tw.GetUserProfileAsync(acc);
+                //DebugSettings.LogInfo("Get User Profile", $"===================={acc}=====================");
+                //var user = await tw.GetUserProfileAsync(acc);
 
-                DebugSettings.LogInfo("User Profile", $"{Environment.NewLine}{user}");
+                //DebugSettings.LogInfo("User Profile", $"{Environment.NewLine}{user}");
+
+                DebugSettings.LogInfo("Get User Tweets", $"===================={acc}=====================");
+                var pageModel = await tw.GetUserTweetsAsync(new TwitterOption() { UserName=acc},-1);
+
+                DebugSettings.LogInfo("User Tweet", $"{Environment.NewLine}{pageModel}");
+                var nextPage = pageModel;
+                while (nextPage.HasNext)
+                {
+                    nextPage = await tw.GetUserTweetsAsync(nextPage.Options, nextPage.NextPageParams);
+                    DebugSettings.LogInfo("User Tweet", $"{Environment.NewLine}{nextPage}");
+                    await Task.Delay(3);
+                }
             }
 
 

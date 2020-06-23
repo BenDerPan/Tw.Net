@@ -11,7 +11,6 @@ namespace Tw.Net.Core
         public static string SanitizeQuery(string baseUrl, Dictionary<string, string> urlParams)
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(urlParams);
             builder.Append("?");
             foreach (var key in urlParams.Keys)
             {
@@ -20,6 +19,7 @@ namespace Tw.Net.Core
             builder.Remove(builder.Length - 1, 1);
             builder.Replace(":", "%3A");
             builder.Replace(" ", "%20");
+            builder.Insert(0, baseUrl);
             return builder.ToString();
         }
 
