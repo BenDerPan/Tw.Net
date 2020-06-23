@@ -100,6 +100,11 @@ namespace Tw.Net.Models
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
 
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+
     }
 
 }

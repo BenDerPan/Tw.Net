@@ -16,7 +16,9 @@ namespace Tw.Net.Example
         static async Task TestAsync()
         {
             Twitter tw = new Twitter();
-            await tw.InitAsync();
+            tw.Proxies.Add(new Core.RequestProxy("127.0.0.1", 1080));
+            //Notice: Online user agent are not work now!!!
+            //await tw.InitAsync();
 
             var testUsers = new List<string>(){
                  "realDonaldTrump","BreitbartNews","taylorswift13"
