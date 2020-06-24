@@ -85,7 +85,7 @@ namespace Tw.Net.Models
         /// <summary>
         /// 爬取时间
         /// </summary>
-        public string SpiderTime { get; set; } = "";
+        public string SpiderTime { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         public override string ToString()
         {
