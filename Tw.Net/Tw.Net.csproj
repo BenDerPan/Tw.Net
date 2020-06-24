@@ -11,6 +11,7 @@
     <PackageTags>Twitter Crawler DotNet</PackageTags>
     <Authors>BenDerPan</Authors>
     <Product>Tw.Net</Product>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
