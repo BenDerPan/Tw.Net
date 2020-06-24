@@ -15,6 +15,8 @@ namespace Tw.Net.Models
         public bool HasNext { get; set; }
         public TwitterOption Options { get; set; }
 
+        public bool IsValid => Tweets.Count > 0;
+
         public TwitterTweetPageModel()
         {
             Tweets = new List<TwitterTweetModel>();

@@ -117,11 +117,11 @@ namespace Tw.Net
             }
             if (option.Since!=null)
             {
-                query.Append($" since:{option.Since.Value.ToString("yyyy-MM-dd HH:mm:ss")}");
+                query.Append($" since:{option.Since.Value.ToString("yyyy-MM-dd")}");
             }
             if (option.Until!=null)
             {
-                query.Append($" until:{option.Until.Value.ToString("yyyy-MM-dd HH:mm:ss")}");
+                query.Append($" until:{option.Until.Value.ToString("yyyy-MM-dd")}");
             }
             if (option.Email)
             {
@@ -237,7 +237,7 @@ namespace Tw.Net
                     
                     if (htmlDoc != null)
                     {
-                        if (HtmlExtracter.TryParseTweet(htmlDoc, out var pageModel))
+                        if (HtmlExtracter.TryParseTweet(option,htmlDoc, out var pageModel))
                         {
                             pageModel.NextPageParams = new Dictionary<string, string>(paramDict);
                             pageModel.HasNext = rawPage.HasMoreItems;

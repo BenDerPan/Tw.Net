@@ -31,12 +31,20 @@ namespace Tw.Net.Example
                 //DebugSettings.LogInfo("User Profile", $"{Environment.NewLine}{user}");
 
                 DebugSettings.LogInfo("Get User Tweets", $"===================={acc}=====================");
-                var pageModel = await tw.GetUserTweetsAsync(new TwitterOption() { UserName=acc},-1);
+                var pageModel = await tw.GetUserTweetsAsync(new TwitterOption() { UserName=acc,Since=new DateTime(2020,5,1,0,0,0)},-1);
 
                 DebugSettings.LogInfo("User Tweet", $"{Environment.NewLine}{pageModel}");
                 var nextPage = pageModel;
-                while (nextPage.HasNext)
+                while (true)
                 {
+                    if (nextPage==null)
+                    {
+                        break;
+                    }
+                    if (!nextPage.HasNext)
+                    {
+                        break;
+                    }
                     nextPage = await tw.GetUserTweetsAsync(nextPage.Options, nextPage.NextPageParams);
                     DebugSettings.LogInfo("User Tweet", $"{Environment.NewLine}{nextPage}");
                     await Task.Delay(3);

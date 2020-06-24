@@ -9,16 +9,47 @@ namespace Tw.Net.Models
     {
         public class ReplyToStruct
         {
+            [JsonProperty("id_str")]
             public string UserID { get; set; } = "";
+
+            [JsonProperty("screen_name")]
             public string UserName { get; set; } = "";
+            public override string ToString()
+            {
+                return JsonConvert.SerializeObject(this, Formatting.Indented);
+            }
+            public string ToJson()
+            {
+                return JsonConvert.SerializeObject(this);
+            }
+            public static ReplyToStruct Parse(string json)
+            {
+                return JsonConvert.DeserializeObject<ReplyToStruct>(json);
+            }
+
+            public static bool TryParse(string json, out ReplyToStruct replyTo)
+            {
+                replyTo = null;
+                try
+                {
+                    replyTo = JsonConvert.DeserializeObject<ReplyToStruct>(json);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
         }
         public long ID { get; set; } = 0;
+        public string IDStr => ID.ToString();
         public string ConversationId { get; set; } = "";
         public long CreatedAt { get; set; } = 0;
         public string Date { get; set; } = "";
         public string Time { get; set; } = "";
         public string Timezone { get; set; } = "";
         public long UserId { get; set; } = 0;
+        public string UserIdStr => UserId.ToString();
         public string UserName { get; set; } = "";
         public string Name { get; set; } = "";
         public string Place { get; set; } = "";

@@ -7,12 +7,19 @@ namespace Tw.Net.Models
 {
     public class RawTweetPage
     {
+        [JsonProperty("min_position")]
         public string MinPosition { get; set; }
 
+        [JsonProperty("has_more_items")]
         public bool HasMoreItems { get; set; }
+        
+        [JsonProperty("items_html")]
         public string ItemsHtml { get; set; }
+
+        [JsonProperty("new_latent_count")]
         public long NewLatentCount { get; set; }
 
+        [JsonProperty("focused_refresh_interval")]
         public long FocusedRefreshInterval { get; set; }
 
         public override string ToString()

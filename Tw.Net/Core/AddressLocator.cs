@@ -7,6 +7,7 @@ namespace Tw.Net.Core
     {
         public const string Mobile = "https://mobile.twitter.com";
         public const string Web = "https://twitter.com/i";
+        public const string TwitterBase = "https://twitter.com";
 
         public static string SanitizeQuery(string baseUrl, Dictionary<string, string> urlParams)
         {
