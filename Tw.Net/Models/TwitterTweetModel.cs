@@ -42,6 +42,7 @@ namespace Tw.Net.Models
             }
         }
         public long ID { get; set; } = 0;
+        [JsonIgnore]
         public string IDStr => ID.ToString();
         public string ConversationId { get; set; } = "";
         public long CreatedAt { get; set; } = 0;
@@ -49,6 +50,7 @@ namespace Tw.Net.Models
         public string Time { get; set; } = "";
         public string Timezone { get; set; } = "";
         public long UserId { get; set; } = 0;
+        [JsonIgnore]
         public string UserIdStr => UserId.ToString();
         public string UserName { get; set; } = "";
         public string Name { get; set; } = "";
