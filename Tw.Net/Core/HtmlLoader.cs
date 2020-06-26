@@ -20,7 +20,7 @@ namespace Tw.Net.Core
             return isOk;
         }
 
-        public static async Task<string> TryLoadPageAsync(string url, RequestProxy proxy = null, int timeoutMilliseconds = 15000)
+        public static async Task<string> TryLoadPageAsync(string url, RequestProxy proxy = null,bool isXmlHttpRequest=true,bool useLatestAgent=true, int timeoutMilliseconds = 15000)
         {
             HttpClient httpClient;
             if (proxy != null)
@@ -54,10 +54,35 @@ namespace Tw.Net.Core
             //var agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36";
 
             //var agent="Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko";
-            var agent = ValidAgent.RandomAgent;
-            Console.WriteLine($"Crawler Target Url={url}, User-Agent:{agent}");
-            httpClient.DefaultRequestHeaders.Add("User-Agent", agent);
-            httpClient.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
+
+            string agent = string.Empty;
+            while (true)
+            {
+                try
+                {
+                    if (useLatestAgent)
+                    {
+                        agent = ValidAgent.RandomAgent;
+                    }
+                    else
+                    {
+                        agent = Agent;
+                    }
+                    //sometimes there is invalid agent type will throw exception
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", agent);
+                    Console.WriteLine($"Crawler Target Url={url}, User-Agent:{agent}");
+                    break;
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+            }
+            if (isXmlHttpRequest)
+            {
+                httpClient.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
+            }
+            
             try
             {
                 var htmlSource = await httpClient.GetStringAsync(url);
@@ -73,9 +98,9 @@ namespace Tw.Net.Core
             }
         }
 
-        public static async Task<IHtmlDocument> TryLoadAndParsePageAsync(string url, RequestProxy proxy = null, int timeoutMilliseconds = 15000)
+        public static async Task<IHtmlDocument> TryLoadAndParsePageAsync(string url, RequestProxy proxy = null, bool isXmlHttpRequest = true, bool useLatestAgent = true, int timeoutMilliseconds = 15000)
         {
-            var htmlSource = await TryLoadPageAsync(url, proxy, timeoutMilliseconds);
+            var htmlSource = await TryLoadPageAsync(url, proxy, isXmlHttpRequest,useLatestAgent,timeoutMilliseconds);
             try
             {
                 var parser = new HtmlParser();

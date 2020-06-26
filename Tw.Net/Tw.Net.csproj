@@ -11,7 +11,7 @@
     <PackageTags>Twitter Crawler DotNet</PackageTags>
     <Authors>BenDerPan</Authors>
     <Product>Tw.Net</Product>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +23,15 @@
     <None Include="logo.jpg">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="C:\Users\bende\.nuget\packages\fakeagent.net\1.0.2\contentFiles\any\netstandard2.0\Cache\herokuapp.source-0.1.11.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="C:\Users\bende\.nuget\packages\fakeagent.net\1.0.2\contentFiles\any\netstandard2.0\Cache\online-source.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

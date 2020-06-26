@@ -24,12 +24,22 @@ namespace Tw.Net.Core
             return builder.ToString();
         }
 
-        public static string Following(string username, string init)
+        public static string Following(string username, string cursor = "-1")
         {
             var url = $"{Mobile}/{username}/following?lang=en";
-            if (init != "-1")
+            if (!string.IsNullOrEmpty(cursor) && cursor != "-1")
             {
-                url += $"&cursor={init}";
+                url += $"&cursor={cursor}";
+            }
+            return url;
+        }
+
+        public static string Follower(string username, string cursor = "-1")
+        {
+            var url = $"{Mobile}/{username}/followers?lang=en";
+            if (!string.IsNullOrEmpty(cursor) && cursor != "-1")
+            {
+                url += $"&cursor={cursor}";
             }
             return url;
         }

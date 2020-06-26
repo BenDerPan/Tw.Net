@@ -38,22 +38,47 @@ namespace Tw.Net
         }
         public async Task InitAsync()
         {
-            var isOnlineOk = await HtmlLoader.TryLoadAgentSource(true);
-            if (!isOnlineOk)
+            var isOfflineOk = await HtmlLoader.TryLoadAgentSource(true);
+            if (!isOfflineOk)
             {
-                isOnlineOk = await HtmlLoader.TryLoadAgentSource(false);
+                var isOnlineOk = await HtmlLoader.TryLoadAgentSource(false);
             }
         }
 
-        public async Task<List<string>> GetFollowingAsync(string username)
+        public async Task<TwitterFollowPageModel> GetFollowingAsync(string username,string cursor="-1")
         {
-            throw new NotImplementedException();
+            var url = AddressLocator.Following(username,cursor);
+            var htmlDoc = await HtmlLoader.TryLoadAndParsePageAsync(url, GetRandomProxy(),false,false);
+            if (htmlDoc!=null)
+            {
+                if (HtmlExtracter.TryParseFollowing(htmlDoc,out var followingPage))
+                {
+                    followingPage.BelongUserName = username;
+                    return followingPage;
+                }
+            }
+            return null; 
+        }
+
+        public async Task<TwitterFollowPageModel> GetFollowerAsync(string username, string cursor = "-1")
+        {
+            var url = AddressLocator.Follower(username,cursor);
+            var htmlDoc = await HtmlLoader.TryLoadAndParsePageAsync(url, GetRandomProxy(), false, false);
+            if (htmlDoc != null)
+            {
+                if (HtmlExtracter.TryParseFollower(htmlDoc, out var followerPage))
+                {
+                    followerPage.BelongUserName = username;
+                    return followerPage;
+                }
+            }
+            return null;
         }
 
         public async Task<TwitterUserModel> GetUserProfileAsync(string username)
         {
 
-            var htmlDoc = await HtmlLoader.TryLoadAndParsePageAsync($"https://twitter.com/{username}", GetRandomProxy());
+            var htmlDoc = await HtmlLoader.TryLoadAndParsePageAsync($"https://twitter.com/{username}?lang=en", GetRandomProxy());
             if (htmlDoc != null)
             {
                 if (HtmlExtracter.TryParseUser(htmlDoc, out var user))
@@ -219,7 +244,7 @@ namespace Tw.Net
         {
             var url = $"{AddressLocator.Web}/search/timeline";
             url = AddressLocator.SanitizeQuery(url, paramDict);
-            var htmlSource = await HtmlLoader.TryLoadPageAsync(url, GetRandomProxy());
+            var htmlSource = await HtmlLoader.TryLoadPageAsync(url, GetRandomProxy(),true,false);
             if (!string.IsNullOrEmpty(htmlSource))
             {
                 if (RawTweetPage.TryParse(htmlSource,out var rawPage))

@@ -5,18 +5,14 @@ using System.Text;
 
 namespace Tw.Net.Models
 {
-    public class TwitterFollowingModel
+    public class TwitterFollowModel
     {
         /// <summary>
-        /// The relation belong to account username
-        /// </summary>
-        public string BelongUserName { get; set; } = "";
-        /// <summary>
-        /// following's screen name
+        /// follower/following's screen name
         /// </summary>
         public string Name { get; set; } = "";
         /// <summary>
-        /// following's username
+        ///  follower/following's username
         /// </summary>
         public string UserName { get; set; } = "";
 
@@ -32,17 +28,17 @@ namespace Tw.Net.Models
         {
             return JsonConvert.SerializeObject(this);
         }
-        public static TwitterFollowingModel Parse(string json)
+        public static TwitterFollowModel Parse(string json)
         {
-            return JsonConvert.DeserializeObject<TwitterFollowingModel>(json);
+            return JsonConvert.DeserializeObject<TwitterFollowModel>(json);
         }
 
-        public static bool TryParse(string json, out TwitterFollowingModel following)
+        public static bool TryParse(string json, out TwitterFollowModel following)
         {
             following = null;
             try
             {
-                following = JsonConvert.DeserializeObject<TwitterFollowingModel>(json);
+                following = JsonConvert.DeserializeObject<TwitterFollowModel>(json);
                 return true;
             }
             catch (Exception)
